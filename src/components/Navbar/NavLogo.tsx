@@ -6,7 +6,7 @@ export function NavLogo() {
   const router = useRouter();
   return (
     <Image
-      src={"/logo.svg"}
+      src={"/logo2.svg"}
       alt="logo"
       fill
       priority

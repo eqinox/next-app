@@ -4,7 +4,7 @@ import ThemeSwitcher from "../ThemeSwitcher";
 import { NavLogo } from "./NavLogo";
 
 const links: LinkType[] = [
-  { url: "/news", label: "Новини" },
+  { url: "/blog", label: "Блог" },
   { url: "/test", label: "Тест" },
 ];
 

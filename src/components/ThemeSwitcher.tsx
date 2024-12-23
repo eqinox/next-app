@@ -4,20 +4,33 @@ import { FaMoon } from "react-icons/fa";
 import { MdSunny } from "react-icons/md";
 
 export default function ThemeSwitcher() {
-  const [theme, setTheme] = useState<"light" | "dark">(() => {
-    return localStorage.getItem("theme") === "dark" ? "dark" : "light";
-  });
+  // State to manage the theme
+  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const root = document.documentElement;
-    if (theme === "dark") {
-      root.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      root.classList.remove("dark");
-      localStorage.setItem("theme", "light");
+    // Retrieve theme from localStorage and apply it
+    const storedTheme = localStorage.getItem("theme");
+    if (storedTheme === "dark") {
+      setTheme("dark");
+      document.documentElement.classList.add("dark");
     }
-  }, [theme]);
+    setMounted(true); // Ensure the component is mounted
+  }, []);
+
+  useEffect(() => {
+    // Apply theme changes to the document
+    if (mounted) {
+      const root = document.documentElement;
+      if (theme === "dark") {
+        root.classList.add("dark");
+        localStorage.setItem("theme", "dark");
+      } else {
+        root.classList.remove("dark");
+        localStorage.setItem("theme", "light");
+      }
+    }
+  }, [theme, mounted]);
 
   const toggleTheme = () => {
     setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
