@@ -1,12 +1,13 @@
 "use client";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function Create() {
+  const router = useRouter();
   return (
     <button
       className="btn"
       onClick={() => {
-        redirect("/blog/create");
+        router.push("/blog/create");
       }}
     >
       Create new post

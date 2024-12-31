@@ -54,21 +54,25 @@ const ImagePicker = <T extends Record<string, any>>({
         onChange={handleImageChange}
         className={`fieldInput hidden ${errors[fieldName] ? "border-red-500" : ""}`}
       />
-
-      <button onClick={handlePickClick} type="button" className="btn">
-        Pick an image
-      </button>
-
-      <div className="relative flex h-32 w-36 items-center justify-center border-2 border-dashed border-orange-500 text-center">
-        {pickedImage && (
-          <Image
-            src={pickedImage}
-            alt="The image selected by the user"
-            fill
-            style={{ objectFit: "contain" }}
-          />
-        )}
-        {!pickedImage && <div>No picked image</div>}
+      <div className="relative flex">
+        <div className="relative flex h-32 w-36 items-center justify-center border-2 border-dashed border-orange-500 text-center">
+          {pickedImage && (
+            <Image
+              src={pickedImage}
+              alt="The image selected by the user"
+              fill
+              style={{ objectFit: "contain" }}
+            />
+          )}
+          {!pickedImage && <div>No picked image</div>}
+        </div>
+        <button
+          onClick={handlePickClick}
+          type="button"
+          className="btn absolute bottom-0 left-40 h-12"
+        >
+          Pick an image
+        </button>
       </div>
 
       {errors[fieldName] && (

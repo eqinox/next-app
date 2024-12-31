@@ -1,17 +1,27 @@
 "use client";
 
-import { CiEdit } from "react-icons/ci";
 import Image from "next/image";
 import { FaRegTrashCan } from "react-icons/fa6";
+import { useRouter } from "next/navigation";
+import { WiTime3 } from "react-icons/wi";
 
 import { PostType } from "@/types/posts";
+import { useState } from "react";
+import Spinner from "../Spinner/Spinner";
 
 interface PostItemProps {
   post: PostType;
 }
 
 const PostItem = ({ post }: PostItemProps) => {
+  const router = useRouter();
+  const [isDeleting, setIsDeleting] = useState(false);
+
   const handleDelete = async () => {
+    if (window.confirm("are you sure you want to delete the post?") === false) {
+      return;
+    }
+    setIsDeleting(true); // Show loading state
     try {
       const response = await fetch(`/api/posts/${post.id}`, {
         method: "DELETE",
@@ -20,32 +30,50 @@ const PostItem = ({ post }: PostItemProps) => {
       if (!response.ok) {
         throw new Error(`Failed to delete post with ID ${post.id}`);
       }
-
+      router.refresh();
       console.log(`Post with ID ${post.id} deleted successfully`);
     } catch (error) {
       console.error("Error deleting post:", error);
+      setIsDeleting(false);
+    } finally {
+      setIsDeleting(false); // Show loading state
     }
   };
 
+  const gotoEdit = () => {
+    router.push(`/blog/${post.id}`);
+  };
+
+  let title = post.title.substring(0, 40);
+  let content = post.content.substring(0, 55);
+
   return (
-    <div className="relative flex h-52 w-52 flex-nowrap">
-      <div className="relative h-32 w-32">
+    <div className="relative flex h-40 w-96 flex-nowrap items-start rounded p-2 transition-all duration-300 hover:bg-neutral-700">
+      <div className="relative mr-1 h-32 min-h-32 min-w-32 flex-shrink-0">
         <Image
           src={post.imageUrl}
           alt="image"
           fill
-          style={{ objectFit: "contain" }}
+          className="cursor-pointer object-fill"
+          sizes="10vw"
+          onClick={() => gotoEdit()}
         />
       </div>
       <div className="flex flex-col">
-        <h2 className="text-3xl">{post.title}</h2>
-        <p className="text-lg">{post.content}</p>
+        <h2
+          className="cursor-pointer text-2xl hover:underline"
+          onClick={() => gotoEdit()}
+        >
+          {title}
+        </h2>
+        <p className="flex items-center text-sm italic">
+          <WiTime3 className="mr-2" />
+          {post.createDate}
+        </p>
+        <p className="text-base">{content}</p>
       </div>
 
       <div className="absolute bottom-2 right-2 flex">
-        <span className="cursor-pointer text-yellow-600 hover:text-yellow-400">
-          <CiEdit size={25} />
-        </span>
         <span
           className="cursor-pointer text-red-600 hover:text-red-500"
           onClick={() => handleDelete()}
@@ -53,6 +81,12 @@ const PostItem = ({ post }: PostItemProps) => {
           <FaRegTrashCan size={25} />
         </span>
       </div>
+
+      {isDeleting && (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <Spinner />
+        </div>
+      )}
     </div>
   );
 };

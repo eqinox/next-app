@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { deletePost } from "@/lib/posts";
+import { revalidatePath } from "next/cache";
 
 export async function DELETE(
   req: NextRequest,
@@ -13,6 +14,7 @@ export async function DELETE(
 
   try {
     await deletePost(Number(id)); // Perform the database deletion
+    revalidatePath("/blog");
     return NextResponse.json({ message: "Post deleted successfully" });
   } catch (error) {
     console.error("Error deleting post:", error);

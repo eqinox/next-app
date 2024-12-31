@@ -9,7 +9,7 @@ interface InputFieldProps<T, U> {
   type?: string; // Optional type for the input, defaults to "text"
 }
 
-const InputField = <
+const TextArea = <
   T extends Record<string, any>,
   U extends Record<string, any>,
 >({
@@ -18,17 +18,15 @@ const InputField = <
   stateFieldName,
   errors,
   state,
-  type = "text", // Default type is "text"
 }: InputFieldProps<T, U>) => {
   return (
     <div className="flex flex-col gap-1">
       <label htmlFor={stateFieldName as string}>{fieldLabel}</label>
-      <input
-        type={type} // Use the passed type or default to "text"
+      <textarea
         id={stateFieldName as string}
         name={stateFieldName as string}
         defaultValue={state[stateFieldName]}
-        className={`fieldInput ${errors[errorFieldName] ? "border-red-500" : ""}`}
+        className={`fieldInput h-40 ${errors[errorFieldName] ? "border-red-500" : ""}`}
       />
       {errors[errorFieldName] && (
         <span className="text-red-500">{errors[errorFieldName]}</span>
@@ -37,4 +35,4 @@ const InputField = <
   );
 };
 
-export default InputField;
+export default TextArea;

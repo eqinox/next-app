@@ -18,7 +18,8 @@ function initDb() {
       imageUrl TEXT NOT NULL,
       title TEXT NOT NULL, 
       content TEXT NOT NULL, 
-      createdAt TEXT DEFAULT CURRENT_TIMESTAMP,
+      createDate TEXT DEFAULT CURRENT_TIMESTAMP,
+      updateDate TEXT DEFAULT CURRENT_TIMESTAMP,
       userId INTEGER, 
       FOREIGN KEY(userId) REFERENCES users(id) ON DELETE CASCADE
     )`);
@@ -57,14 +58,35 @@ export async function getAllPosts() {
   return posts;
 }
 
+export async function getPostById(postId: number): Promise<PostType> {
+  const stmt = db.prepare("SELECT * FROM posts WHERE id = ?");
+
+  const post = stmt.get(postId) as PostType;
+
+  return post;
+}
+
 export async function storePost(post: PostType) {
-  console.log("storing post", post);
   const stmt = db.prepare(
     `INSERT INTO posts (imageUrl, title, content, userId)
     VALUES (?, ?, ?, ?)`,
   );
   await new Promise((resolve) => setTimeout(resolve, 2000));
   return stmt.run(post.imageUrl, post.title, post.content, post.userId);
+}
+
+export async function updatePost(post: PostType) {
+  const stmt = db.prepare(
+    `UPDATE posts
+     SET title = ?, content = ?, updateDate = ?
+     WHERE id = ?`,
+  );
+
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+
+  const updateDate = new Date().toISOString().slice(0, 19).replace("T", " ");
+
+  return stmt.run(post.title, post.content, updateDate, post.id);
 }
 
 export async function deletePost(postId: number) {

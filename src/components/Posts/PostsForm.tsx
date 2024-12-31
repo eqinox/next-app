@@ -1,19 +1,19 @@
 "use client";
-
 import { useActionState, useEffect, useState } from "react";
-import { CreatePostValidationErrorsType } from "@/types/posts";
+
+import { CreatePostValidationErrorsType, PostType } from "@/types/posts";
 import InputField from "@/components/InputField";
 import ImagePicker from "@/components/ImagePicker";
-type ActionType<T, U> = (...args: any[]) => U | Promise<U>;
+import { PostActionState } from "@/types/posts";
+import { UseActionStateType } from "@/types/common";
+import TextArea from "../TextArea";
 
-interface PostsFormProps<T, U> {
-  action: ActionType<T, U>;
+interface PostsFormProps {
+  action: UseActionStateType<PostActionState>;
 }
 
-const PostsForm: React.FC<PostsFormProps<object, object>> = ({ action }) => {
-  const [state, formAction, isPending] = useActionState<
-    { errors: CreatePostValidationErrorsType } | {}
-  >(action, {});
+const PostsForm: React.FC<PostsFormProps> = ({ action }) => {
+  const [state, formAction, isPending] = useActionState(action, {});
   const [dots, setDots] = useState(".");
 
   useEffect(() => {
@@ -26,18 +26,41 @@ const PostsForm: React.FC<PostsFormProps<object, object>> = ({ action }) => {
       setDots("."); // Reset dots when not pending
     }
   }, [isPending]);
-
+  console.log("state", state);
   let errors: CreatePostValidationErrorsType = {};
+  let post: PostType = state.post ?? {
+    content: "",
+    imageUrl: "",
+    title: "",
+    userId: 1,
+  };
+  // if ("post" in state) {
+  //   post = state.post as PostType;
+  // }
+
+  console.log("post", post);
   if ("errors" in state) {
-    errors = state.errors;
+    errors = state.errors as CreatePostValidationErrorsType;
   }
 
   return (
-    <form action={formAction} className="mt-10 w-96 text-xl">
+    <form action={formAction} className="mt-10 w-2/4 text-xl">
       <div className="flex flex-col gap-4">
-        <InputField errors={errors} fieldLabel="Title" fieldName="title" />
+        <InputField
+          errors={errors}
+          state={post}
+          fieldLabel="Title"
+          errorFieldName="title"
+          stateFieldName="title"
+        />
 
-        <InputField errors={errors} fieldLabel="Content" fieldName="content" />
+        <TextArea
+          errors={errors}
+          state={post}
+          fieldLabel="Content"
+          stateFieldName="content"
+          errorFieldName="content"
+        />
 
         <ImagePicker fieldLabel="Image" errors={errors} fieldName="image" />
 

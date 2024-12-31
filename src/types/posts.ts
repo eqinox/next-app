@@ -9,5 +9,12 @@ export type PostType = {
   title: string;
   content: string;
   userId: number;
-  id?: number;
+  id: number;
+  createDate: string;
+  updateDate: string;
+};
+
+export type PostActionState = {
+  post?: PostType;
+  errors?: CreatePostValidationErrorsType;
 };
