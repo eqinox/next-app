@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { deletePost } from "@/lib/posts";
+import { deletePost } from "@/lib/posts-db";
 import { revalidatePath } from "next/cache";
 
 export async function DELETE(

@@ -1,10 +1,14 @@
 "use client";
 import { useActionState, useEffect, useState } from "react";
 
-import { CreatePostValidationErrorsType, PostType } from "@/types/posts";
+import {
+  CreatePostValidationErrorsType,
+  PostType,
+  PostTypeDB,
+} from "@/types/post-types";
 import InputField from "@/components/InputField";
 import ImagePicker from "@/components/ImagePicker";
-import { PostActionState } from "@/types/posts";
+import { PostActionState } from "@/types/post-types";
 import { UseActionStateType } from "@/types/common";
 import TextArea from "../TextArea";
 
@@ -26,19 +30,14 @@ const PostsForm: React.FC<PostsFormProps> = ({ action }) => {
       setDots("."); // Reset dots when not pending
     }
   }, [isPending]);
-  console.log("state", state);
+
   let errors: CreatePostValidationErrorsType = {};
-  let post: PostType = state.post ?? {
+  let post: PostTypeDB = state.post ?? {
     content: "",
     imageUrl: "",
     title: "",
-    userId: 1,
   };
-  // if ("post" in state) {
-  //   post = state.post as PostType;
-  // }
 
-  console.log("post", post);
   if ("errors" in state) {
     errors = state.errors as CreatePostValidationErrorsType;
   }

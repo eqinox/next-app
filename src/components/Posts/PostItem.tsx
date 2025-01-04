@@ -4,16 +4,18 @@ import Image from "next/image";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
 import { WiTime3 } from "react-icons/wi";
-
-import { PostType } from "@/types/posts";
 import { useState } from "react";
+
+import { PostType } from "@/types/post-types";
 import Spinner from "../Spinner/Spinner";
+import { UserType } from "@/types/user-types";
 
 interface PostItemProps {
   post: PostType;
+  loggedUser: UserType;
 }
 
-const PostItem = ({ post }: PostItemProps) => {
+const PostItem = ({ post, loggedUser }: PostItemProps) => {
   const router = useRouter();
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -73,14 +75,20 @@ const PostItem = ({ post }: PostItemProps) => {
         <p className="text-base">{content}</p>
       </div>
 
-      <div className="absolute bottom-2 right-2 flex">
-        <span
-          className="cursor-pointer text-red-600 hover:text-red-500"
-          onClick={() => handleDelete()}
-        >
-          <FaRegTrashCan size={25} />
-        </span>
+      <div className="absolute bottom-0 left-2">
+        created by {post.createdBy.firstName} {post.createdBy.lastName}
       </div>
+
+      {post.createdBy.id === loggedUser.id && (
+        <div className="absolute bottom-2 right-2 flex">
+          <span
+            className="cursor-pointer text-red-600 hover:text-red-500"
+            onClick={() => handleDelete()}
+          >
+            <FaRegTrashCan size={25} />
+          </span>
+        </div>
+      )}
 
       {isDeleting && (
         <div className="absolute inset-0 flex items-center justify-center">

@@ -2,8 +2,8 @@
 import Image from "next/image";
 import { useActionState, useState } from "react";
 
-import { CreatePostValidationErrorsType, PostType } from "@/types/posts";
-import { PostActionState } from "@/types/posts";
+import { CreatePostValidationErrorsType, PostType } from "@/types/post-types";
+import { PostActionState } from "@/types/post-types";
 import { UseActionStateType } from "@/types/common";
 import InputField from "@/components/InputField";
 import TextArea from "@/components/TextArea";
@@ -27,7 +27,7 @@ const ViewPostFullClient: React.FC<ViewPostFullClientProps> = ({
 
   let statePost: PostType = { ...post };
   if (state.post) {
-    statePost = state.post;
+    statePost = state.post as PostType;
   }
 
   return (

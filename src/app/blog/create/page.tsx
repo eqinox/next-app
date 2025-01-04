@@ -2,8 +2,8 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 
 import PostsForm from "@/components/Posts/PostsForm";
-import { createPost } from "@/lib/actions/posts";
-import { PostActionState } from "@/types/posts";
+import { createPost } from "@/lib/actions/post-actions";
+import { PostActionState } from "@/types/post-types";
 
 const CreatePostPage: React.FC = () => {
   async function handleCreatePost(

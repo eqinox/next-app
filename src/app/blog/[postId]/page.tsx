@@ -1,7 +1,7 @@
-import { getPostById } from "@/lib/posts";
+import { getPostById } from "@/lib/posts-db";
 import ViewPostFullClient from "./ViewPostFullClient";
-import { editPost } from "@/lib/actions/posts";
-import { PostActionState } from "@/types/posts";
+import { editPost } from "@/lib/actions/post-actions";
+import { PostActionState, PostType } from "@/types/post-types";
 import { redirect } from "next/navigation";
 
 export default async function ViewPostFull({

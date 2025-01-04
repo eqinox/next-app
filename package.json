@@ -9,8 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@lucia-auth/adapter-sqlite": "^3.0.2",
     "better-sqlite3": "^11.7.0",
     "cloudinary": "^2.5.1",
+    "lucia": "^3.2.2",
     "next": "15.1.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

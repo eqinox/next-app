@@ -1,12 +1,14 @@
-import { storePost, updatePost } from "../posts";
+import { storePost, updatePost } from "../posts-db";
 import {
   CreatePostValidationErrorsType,
   PostActionState,
   PostType,
-} from "@/types/posts";
+  PostTypeDB,
+} from "@/types/post-types";
 import { uploadImage } from "../cloudinary";
 
 import { z, ZodError } from "zod";
+import { getUserById, verifyAuth } from "../auth-db";
 
 // Validation schema for createPost
 export const createPostSchema = z.object({
@@ -60,7 +62,6 @@ export async function createPost(
         title,
         content,
         imageUrl: prevState.post?.imageUrl || "",
-        userId: 1,
       },
     };
   }
@@ -74,11 +75,17 @@ export async function createPost(
     );
   }
 
-  const post = {
+  const authSesstion = await verifyAuth();
+  let userId = 1;
+  if (authSesstion.session) {
+    userId = (await getUserById(authSesstion.session?.userId as string)).id;
+  }
+
+  const post: PostTypeDB = {
+    userId,
     imageUrl,
     title,
     content,
-    userId: 1,
   };
 
   await storePost(post);
